@@ -12,11 +12,11 @@ import traceback
 from argparse import Namespace
 from dataclasses import dataclass
 from functools import cached_property
+from math import nan as NaN
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-import pyperclip
-from numpy import NaN
+import pyperclip  # pylint: disable=wrong-import-order
 
 from llm_genplan import utils
 from llm_genplan.envs import get_prompt_problem_distribution
@@ -61,7 +61,7 @@ class GeneralizedPlan:
         return module.get_plan(task.objects, task.init, task.goal)  # type: ignore  # pylint: disable=undefined-variable
 
 
-def get_genplan_from_llm(
+def get_genplan_from_llm(  # pylint: disable=too-many-positional-arguments
     prompt_tasks: List[Task],
     extra_train_tasks: List[Task],
     save_path: Path,

@@ -43,7 +43,7 @@ def _generate_problem_str(
 """
 
 
-def _run(
+def _run(  # pylint: disable=too-many-positional-arguments
     train_dir: Path,
     test_dir: Path,
     num_seed: int,

@@ -9,7 +9,6 @@ import heapq
 PDDLDIR = os.path.join(os.path.dirname(pddlgym.__file__), "pddl")
 
 I, G, W, P, X, H = range(6)
-
 """
 Questions to consider:
     1. Do we allow adjacent blocks to be a path?
