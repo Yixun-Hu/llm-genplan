@@ -36,7 +36,8 @@ def load_results(
     for filepath in sorted(glob.glob(f"{results_dir}/*")):
         with open(filepath, "rb") as f:
             outdata = pickle.load(f)
-        env, seed, experiment_id = Path(filepath).stem.split("__")
+        env, seed_str, experiment_id = Path(filepath).stem.split("__")
+        seed = int(seed_str)
         if env.endswith("-ablated"):
             env = env[: -len("-ablated")]
         git_commit_hashes.add(outdata["git_commit_hash"])
@@ -82,13 +83,13 @@ def _create_success_table(raw_results: pd.DataFrame, save_summary: bool = True) 
     # Group by env, seed, and experiment ID.
     grouped = df.groupby(["env", "seed", "experiment_id"])
     # Average over eval tasks.
-    eval_means = grouped.mean().reset_index()
+    eval_means = grouped.mean(numeric_only=True).reset_index()
     # Get statistics over seed.
     grouped = eval_means.groupby(["env", "experiment_id"])
-    means = grouped.mean()
-    stds = grouped.std(ddof=0)
+    means = grouped.mean(numeric_only=True)
+    stds = grouped.std(ddof=0, numeric_only=True)
     sizes = grouped.size().to_frame()
-    summary = means.copy()
+    summary = means.astype(object).copy()
     # Add standard deviations to the printout.
     for col in means:
         for row in means[col].keys():
